@@ -321,8 +321,8 @@ function initGame() {
     // 今回は固定値でいくが、画面サイズに合わせて少し調整する。
     const scaleFactor = state.width / 800;
     CONFIG.ballRadius = 13 * scaleFactor;
-    CONFIG.pocketRadius = 36 * scaleFactor;
-    CONFIG.cornerPocketRadius = 56 * scaleFactor;
+    // 指示: 穴の半径の大きさはボール直径(2r)の1.2倍
+    CONFIG.pocketRadius = (CONFIG.ballRadius * 2) * 1.2;
     CONFIG.tablePadding = 25 * scaleFactor;
 
     resetBoard();
@@ -361,19 +361,19 @@ function resetBoard() {
 
     const w = state.width;
     const h = state.height;
+    const p = CONFIG.tablePadding; // 枠の内側（プレイエリアの端）
     
     // Pockets positions with size
-    // Corner pockets
-    const cp = CONFIG.cornerPocketRadius;
-    const sp = CONFIG.pocketRadius;
+    // 指示: 枠の内側から描画する（基点をプレイエリアの角にする）
+    const pr = CONFIG.pocketRadius;
     
     state.pockets = [
-        { pos: new Vec2(0, 0), radius: cp },       // Top Left
-        { pos: new Vec2(w/2, 0), radius: sp },     // Top Middle
-        { pos: new Vec2(w, 0), radius: cp },       // Top Right
-        { pos: new Vec2(0, h), radius: cp },       // Bottom Left
-        { pos: new Vec2(w/2, h), radius: sp },     // Bottom Middle
-        { pos: new Vec2(w, h), radius: cp }        // Bottom Right
+        { pos: new Vec2(p, p), radius: pr },         // Top Left
+        { pos: new Vec2(w/2, p), radius: pr },       // Top Middle
+        { pos: new Vec2(w - p, p), radius: pr },     // Top Right
+        { pos: new Vec2(p, h - p), radius: pr },     // Bottom Left
+        { pos: new Vec2(w/2, h - p), radius: pr },   // Bottom Middle
+        { pos: new Vec2(w - p, h - p), radius: pr }  // Bottom Right
     ];
 
     // Cue Ball (White)
